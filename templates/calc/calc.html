@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+    <div class="container mt-5">
+
+        <h2>Calc</h2>
+        <form method="post">
+            {% csrf_token %}
+            <div class="container">
+                <div class="row">
+                    <div class="col{% if is_valid %} was-validated{% endif %}">
+                        {% for field in form %}
+                            <div class="mb-3">
+                                <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                                <input type="{{ field.widget_type }}"
+                                       class="form-control {% if is_valid == False %} is-invalid{% endif %}"
+                                       name="{{ field.name }}"
+                                       id="{{ field.id_for_label }}" aria-describedby="{{ field.name }}"
+                                       value="{% if field.value %}{{ field.value }}{% endif %}" readonly>
+                            </div>
+                        {% endfor %}
+                        <div style="display: grid;grid-template-columns: 1fr 1fr 1fr 1fr;gap: 10px;">
+                            {% for operator in operators %}
+                                <button class="btn btn-outline-primary operator"
+                                        value="{{ operator }}">{{ operator }}</button>
+                            {% endfor %}
+
+                            {% for number in numbers %}
+                                <button name="numbers" class="btn btn-outline-primary number"
+                                        value="{{ number }}">{{ number }}</button>
+                            {% endfor %}
+
+                            <button type="submit" class="btn btn-outline-primary">=</button>
+                            <button id="backspace" class="btn btn-outline-primary numbers">&#8592;</button>
+                        </div>
+                    </div>
+                    <div class="col">
+                        {% for solve in history %}
+                            <div class="mb-1">
+                                {{ solve }}
+                            </div>
+                        {% endfor %}
+
+                    </div>
+                </div>
+            </div>
+
+            {{ form.non_field_errors }}
+        </form>
+    </div>
+
+    {% load static %}
+    <script src="{% static 'js/calc.js' %}"></script>
+
+{% endblock %}

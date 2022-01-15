@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="container mt-5">
+        <h2>Log In</h2>
+        <form method="post">
+            {% csrf_token %}
+            {% for field in form %}
+                <div class="mb-3">
+                    <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                    <input type="{{ field.widget_type }}" class="form-control" name="{{ field.name }}"
+                           id="{{ field.id_for_label }}" aria-describedby="{{ field.name }}">
+                    {% if field.help_text %}
+                        <p id="{{ field.name }}" class="form-text" class="help">{{ field.help_text|safe }}</p>
+                    {% endif %}
+                </div>
+            {% endfor %}
+
+
+            <button type="submit" class="btn btn-primary">Submit</button>
+
+            {{ form.non_field_errors }}
+
+        </form>
+    </div>
+{% endblock %}
